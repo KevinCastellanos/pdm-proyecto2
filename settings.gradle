@@ -1,0 +1,2 @@
+rootProject.name='pdm-proyecto2'
+include ':app'
