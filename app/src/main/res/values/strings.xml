@@ -12,4 +12,9 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_de_rutas">Fragment de rutas</string>
+    <string name="txt_rutas_de_el_salvador">Rutas de El Salvador</string>
 </resources>
