@@ -46,6 +46,8 @@ public class RutaFragment extends Fragment {
         listaRuta.add("Ruta R44");
         listaRuta.add("Ruta R3");
         // nuevo comentario
+        // me tocaba hacer el login
+        // la logica la puse aqui
 
         // crear el adaptador de array
         // porque se esta en un fragment se llama a vista.getContext() y no solo a this
