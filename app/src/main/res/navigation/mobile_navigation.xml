@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/mapsFragment">
 
     <fragment
         android:id="@+id/nav_home"
@@ -25,6 +25,11 @@
     <fragment
         android:id="@+id/rutaFragment"
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.RutaFragment"
-        android:label="fragment_ruta"
+        android:label="@string/menu_ruta"
         tools:layout="@layout/fragment_ruta" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.MapsFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_maps" />
 </navigation>
