@@ -8,28 +8,29 @@
 
 
     <Button
-        android:id="@+id/ingresar"
+        android:id="@+id/button_ingresar"
         android:layout_width="0dp"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="Ingresar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.717" />
+        app:layout_constraintTop_toBottomOf="@+id/contraseña" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="90dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="24dp"
         android:src="@drawable/ic_location24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/correo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/correo"
@@ -55,7 +56,7 @@
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/ingresar"
+        app:layout_constraintBottom_toTopOf="@+id/button_ingresar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
