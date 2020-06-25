@@ -58,7 +58,10 @@ Retrofit retrofit;
                                         Usuario respuesta=response.body();
                                         DatosUsuario.IDCOORDENADAUSUARIO=respuesta.getIDCOORDENADAUSUARIO().toString();
                                         DatosUsuario.IDUSUARIO=respuesta.getIDUSUARIO().toString();
-                                        DatosUsuario.IDVEHICULO=respuesta.getIDVEHICULO().toString();
+                                   /*     if(respuesta.getIDVEHICULO().toString().isEmpty()){
+
+                                        }else{
+                                        DatosUsuario.IDVEHICULO=respuesta.getIDVEHICULO().toString();} */
                                         DatosUsuario.NOMBRE=respuesta.getNOMBRE().toString();
                                         DatosUsuario.PWD=respuesta.getPWD().toString();
                                         DatosUsuario.USUARIO=respuesta.getUSUARIO().toString();
