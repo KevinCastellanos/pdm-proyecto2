@@ -6,7 +6,8 @@ import retrofit2.http.Query;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.clases.Usuario;
 
 public interface ApiServices {
-@POST("Login2")
+
+    @POST("Login2")
     Call<Usuario> login(@Query("USUARIO") String usuario,
                         @Query("PWD") String pass);
 }
