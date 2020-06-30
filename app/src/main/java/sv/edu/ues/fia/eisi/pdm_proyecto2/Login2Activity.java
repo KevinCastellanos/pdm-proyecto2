@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosUsuario;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.clases.Usuario;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Usuario;
 
 public class Login2Activity extends Activity {
 Retrofit retrofit;

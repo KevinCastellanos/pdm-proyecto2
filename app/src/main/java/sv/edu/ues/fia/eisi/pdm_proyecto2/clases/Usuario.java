@@ -1,4 +1,4 @@
-package sv.edu.ues.fia.eisi.pdm_proyecto2.clases;
+package sv.edu.ues.fia.eisi.pdm_proyecto2.Clases;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
