@@ -7,13 +7,16 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
@@ -23,6 +26,12 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.ArrayList;
+
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.TextoReconocido;
+
+import static sv.edu.ues.fia.eisi.pdm_proyecto2.vozAtextoFragment.check;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.rutaFragment,R.id.mapsFragment, R.id.fragment_AgregarRuta)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.rutaFragment,R.id.mapsFragment, R.id.fragment_AgregarRuta, R.id.vozAtextoFragment)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -113,4 +122,9 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-}
+
+
+
+
+    }
+
