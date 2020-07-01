@@ -20,6 +20,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosRuta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosUsuario;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.R;
 
@@ -28,11 +30,7 @@ import sv.edu.ues.fia.eisi.pdm_proyecto2.R;
 
  */
 public class RegistrarRuta extends Fragment {
-
     Retrofit retrofit;
-    Button RegistrarRuta;
-    EditText Nombre;
-    EditText Descripcion;
 
     public RegistrarRuta() {
         // Required empty public constructor
@@ -54,26 +52,26 @@ public class RegistrarRuta extends Fragment {
                 .build();
 
         View vista=inflater.inflate(R.layout.fragment__agregar_ruta, container, false);
-        Nombre=vista.findViewById(R.id.edit_IngresarRuta);
-        Descripcion=vista.findViewById(R.id.edit_ingresarDescripcion);
-        RegistrarRuta=vista.findViewById(R.id.button_RegistrarRuta);
+        String Nombre=((EditText) vista.findViewById(R.id.edit_IngresarRuta)).getText().toString();
+        String Descripcion=((EditText) vista.findViewById(R.id.edit_ingresarDescripcion)).getText().toString();
+        Button RegistrarRuta=vista.findViewById(R.id.button_RegistrarRuta);
 
         RegistrarRuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String NOMBRE=Nombre.getText().toString();
-                String DESCRIPCION=Descripcion.getText().toString();
+                String Nombre=((EditText) vista.findViewById(R.id.edit_IngresarRuta)).getText().toString();
+                String Descripcion=((EditText) vista.findViewById(R.id.edit_ingresarDescripcion)).getText().toString();
                 ApiServices service = retrofit.create(ApiServices.class);
 
-                service.agregarRuta(NOMBRE, DESCRIPCION).
+                service.agregarRuta(Nombre, Descripcion).
                         enqueue(new Callback<Ruta>() {
                             @Override
                             public void onResponse(Call<Ruta> call, Response<Ruta> response) {
-                                Log.i("aqui","no finaliza");
                                 if(response.isSuccessful()){
-                                    Log.i("aqui","dentro de on response");
                                     Ruta respuesta=response.body();
+                                    DatosRuta.NOMBRE =respuesta.getNOMBRE().toString();
+                                    DatosRuta.DESCRIPCION=respuesta.getDESCRIPCION().toString();
                                     if(respuesta.equals("1")){
                                         Toast.makeText(getActivity(),"ruta registrada",Toast.LENGTH_LONG).show();
                                     }else{
