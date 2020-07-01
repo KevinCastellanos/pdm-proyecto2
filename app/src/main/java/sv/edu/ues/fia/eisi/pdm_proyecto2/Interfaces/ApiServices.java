@@ -1,5 +1,7 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -16,4 +18,9 @@ public interface ApiServices {
     @POST("Login2")
     Call<Usuario> login(@Query("USUARIO") String usuario,
                         @Query("PWD") String pass);
+
+    //Listar Rutas
+    @POST("obtener-rutas")
+    Call<List<Ruta>> obtenerRutas();
+
 }
