@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
 
 
 /**
@@ -20,9 +31,10 @@ import java.util.ArrayList;
  */
 public class RutaFragment extends Fragment {
 
-    // propiedades
+    // propiedades x
     View vista;
     ListView lista;
+    Retrofit retrofit;
 
     public RutaFragment() {
         // Required empty public constructor
@@ -37,30 +49,52 @@ public class RutaFragment extends Fragment {
         // crear el adaptador
         this.lista = (ListView) this.vista.findViewById(R.id.id_lista_ruta);
 
-        // Crear al array list
-        ArrayList<String> listaRuta = new ArrayList<>();
-        listaRuta.add("Ruta R185");
-        listaRuta.add("Ruta R187");
-        listaRuta.add("Ruta R205");
-        listaRuta.add("Ruta R13");
-        listaRuta.add("Ruta R44");
-        listaRuta.add("Ruta R3");
-        // nuevo comentario
-        // me tocaba hacer el login
-        // la logica la puse aqui
+        retrofit = new Retrofit.Builder()
+                .baseUrl(UrlBase.UrlBase)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        // crear el adaptador de array
-        // porque se esta en un fragment se llama a vista.getContext() y no solo a this
-        ArrayAdapter adaptador = new ArrayAdapter(vista.getContext(), android.R.layout.simple_list_item_1, listaRuta);
+        ApiServices apiServices = retrofit.create(ApiServices.class);
 
-        // añadimos el adaptador a la lilsta de la vista
-        this.lista.setAdapter(adaptador);
+        Call<List<Ruta>> call = apiServices.obtenerRutas();
 
-        // crearle los eventos a la lista
+        call.enqueue(new Callback<List<Ruta>>() {
+            @Override
+            public void onResponse(Call<List<Ruta>> call, Response<List<Ruta>> response) {
+
+                /*Para realizar el testo de los datos recuperados
+                Log.e("Test",String.valueOf(response));
+                Log.e("Test",String.valueOf(response.body().getClass().getName()));
+                Log.e("Test",String.valueOf(response.body().size()));
+                */
+
+               //Lista para recuperar los elementos de la API
+               List<Ruta> listaRuta = response.body();
+
+               //Definición de lista que se mostrarán en el adapter
+                ArrayList<String> rutaprueba = new ArrayList<>();
+
+               for (int i=0; i<response.body().size();i++){
+               //     Log.e("Test",String.valueOf(listaRuta.get(i).getNOMBRE())); //Prueba para traer los nombres
+                    rutaprueba.add(listaRuta.get(i).getNOMBRE());
+                }
+
+                ArrayAdapter<String> itemsAdapter =
+                        new ArrayAdapter<String>(vista.getContext(), android.R.layout.simple_list_item_1, rutaprueba);
+                lista.setAdapter(itemsAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Ruta>> call, Throwable t) {
+                Toast.makeText(vista.getContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         this.lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(parent.getContext(), "Selecciono la ruta: " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(), "Seleccionó la ruta: " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
