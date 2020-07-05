@@ -37,4 +37,9 @@
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.RegistrarRuta"
         android:label="fragment__agregar_ruta"
         tools:layout="@layout/fragment__agregar_ruta" />
+    <fragment
+        android:id="@+id/vozAtextoFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.vozAtextoFragment"
+        android:label="fragment_voz_atexto"
+        tools:layout="@layout/fragment_voz_atexto" />
 </navigation>

@@ -19,7 +19,7 @@ public interface ApiServices {
     Call<Usuario> login(@Query("USUARIO") String usuario,
                         @Query("PWD") String pass);
 
-    //Listar Rutas
+    //Listar Rutas X
     @POST("obtener-rutas")
     Call<List<Ruta>> obtenerRutas();
 
