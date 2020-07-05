@@ -31,7 +31,7 @@ import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
  */
 public class RutaFragment extends Fragment {
 
-    // propiedades
+    // propiedades x
     View vista;
     ListView lista;
     Retrofit retrofit;
