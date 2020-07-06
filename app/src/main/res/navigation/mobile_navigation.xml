@@ -55,8 +55,10 @@
         android:label="Sonido" />
 <!-->>>>>>> Sonido-->
 <!--=======-->
+         />
+<!-->>>>>>> r_camara-->
+    <fragment
         android:id="@+id/camaraFragment"
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.camaraX.CamaraFragment"
-        android:label="CamaraFragment" />
-<!-->>>>>>> r_camara-->
+        android:label="CamaraFragment"/>
 </navigation>
