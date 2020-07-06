@@ -1,7 +1,5 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -10,37 +8,19 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosRuta;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosUsuario;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
-import sv.edu.ues.fia.eisi.pdm_proyecto2.R;
-import android.os.Bundle;
 
-public class Sonido extends AppCompatActivity {
+public class SonidoFragment extends FragmentActivity {
     Button mostrarNotificacion;
     MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_sonido);
         mostrarNotificacion=(Button)findViewById(R.id.btnMostrarNotificacion);
         mp = MediaPlayer.create(this, R.raw.beep);
 
@@ -56,12 +36,12 @@ public class Sonido extends AppCompatActivity {
                 mp.start();
 
                 int icono = R.mipmap.ic_launcher;
-                Intent i=new Intent(Sonido.this, Sonido.class);
+                Intent i=new Intent(SonidoFragment.this, SonidoFragment.class);
                 //Aquí hay que agregar la clase a la que se dirigirá el usuario al darle click a la notificación, PENDIENTE
 
 
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(Sonido.this, 0, i, 0);
+                PendingIntent pendingIntent = PendingIntent.getActivity(SonidoFragment.this, 0, i, 0);
                 mBuilder =new NotificationCompat.Builder(getApplicationContext())
                         .setContentIntent(pendingIntent)
                         .setSmallIcon(icono)
@@ -71,6 +51,7 @@ public class Sonido extends AppCompatActivity {
                         .setVibrate(new long[] {100, 250, 100, 500})
                         .setAutoCancel(true);
 
+                mp.stop();
 
 
                 mNotifyMgr.notify(1, mBuilder.build());

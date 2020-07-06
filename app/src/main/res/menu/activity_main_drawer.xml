@@ -34,7 +34,7 @@
             android:icon="@drawable/ic_launcher_background"
             android:title="Registrar Ruta" />
         <item
-            android:id="@+id/activity_sonido"
+            android:id="@+id/fragment_sonido"
             android:icon="@drawable/ic_launcher_background"
             android:title="Sonido" />
 
