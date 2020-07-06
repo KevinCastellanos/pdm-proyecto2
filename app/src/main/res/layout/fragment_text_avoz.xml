@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <EditText
+        android:id="@+id/edtText2Speech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="escriba su texto ">
+        <requestFocus />
+    </EditText>
+    <Button
+        android:id="@+id/btnText2SpeechPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="play" android:layout_gravity="right" />
+    <Button
+        android:id="@+id/btnText2SpeechSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save" android:layout_gravity="right" />
+</LinearLayout>
