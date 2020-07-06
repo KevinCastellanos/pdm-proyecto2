@@ -33,7 +33,6 @@
         android:label="@string/menu_map"
         tools:layout="@layout/fragment_maps" />
     <fragment
-<<<<<<< HEAD
         android:id="@+id/fragment_AgregarRuta"
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.RegistrarRuta"
         android:label="fragment__agregar_ruta"
