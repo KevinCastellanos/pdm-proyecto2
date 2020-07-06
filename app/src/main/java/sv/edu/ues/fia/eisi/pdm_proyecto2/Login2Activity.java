@@ -1,6 +1,7 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,12 +15,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosLog;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosUsuario;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Usuario;
 
 public class Login2Activity extends Activity {
 Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,11 @@ Retrofit retrofit;
                                         DatosUsuario.PWD=respuesta.getPWD().toString();
                                         DatosUsuario.USUARIO=respuesta.getUSUARIO().toString();
                                         Toast.makeText(getApplicationContext(), "usuario logueado", Toast.LENGTH_SHORT).show();
+
+                                        DatosLog data = new DatosLog();
+
+                                        data.Registrar(DatosUsuario.USUARIO,DatosUsuario.PWD,v.getContext());
+                                       // data.Buscar(v.getContext(),DatosUsuario.NOMBRE);
 
                                         final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);

@@ -29,6 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.DatosLog;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.TextoReconocido;
 
 import static sv.edu.ues.fia.eisi.pdm_proyecto2.vozAtextoFragment.check;
@@ -127,8 +128,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DatosLog dato = new DatosLog();
+        if(dato.Eliminar(this)==1)
+        {
+            Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(this, "Finalizado", Toast.LENGTH_SHORT).show();
     }
+}
 
