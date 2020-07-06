@@ -31,6 +31,9 @@ import sv.edu.ues.fia.eisi.pdm_proyecto2.R;
  */
 public class RegistrarRuta extends Fragment {
     Retrofit retrofit;
+    EditText Nombre;
+    EditText Descripcion;
+
 
     public RegistrarRuta() {
         // Required empty public constructor
@@ -52,19 +55,19 @@ public class RegistrarRuta extends Fragment {
                 .build();
 
         View vista=inflater.inflate(R.layout.fragment__agregar_ruta, container, false);
-        String Nombre=((EditText) vista.findViewById(R.id.edit_IngresarRuta)).getText().toString();
-        String Descripcion=((EditText) vista.findViewById(R.id.edit_ingresarDescripcion)).getText().toString();
+        Nombre=vista.findViewById(R.id.edit_IngresarRuta);
+        Descripcion =vista.findViewById(R.id.edit_ingresarDescripcion);
         Button RegistrarRuta=vista.findViewById(R.id.button_RegistrarRuta);
 
         RegistrarRuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String Nombre=((EditText) vista.findViewById(R.id.edit_IngresarRuta)).getText().toString();
-                String Descripcion=((EditText) vista.findViewById(R.id.edit_ingresarDescripcion)).getText().toString();
+                String NOMBRE= Nombre.getText().toString();
+                String DESCRIPCION=Descripcion.getText().toString();
                 ApiServices service = retrofit.create(ApiServices.class);
 
-                service.agregarRuta(Nombre, Descripcion).
+                service.agregarRuta(NOMBRE, DESCRIPCION).
                         enqueue(new Callback<Ruta>() {
                             @Override
                             public void onResponse(Call<Ruta> call, Response<Ruta> response) {
@@ -72,15 +75,10 @@ public class RegistrarRuta extends Fragment {
                                     Ruta respuesta=response.body();
                                     DatosRuta.NOMBRE =respuesta.getNOMBRE().toString();
                                     DatosRuta.DESCRIPCION=respuesta.getDESCRIPCION().toString();
-                                    if(respuesta.equals("1")){
-                                        Toast.makeText(getActivity(),"ruta registrada",Toast.LENGTH_LONG).show();
-                                    }else{
-                                        Toast.makeText(getActivity(),"no registrado verifique los datos",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(),"ruta registrada",Toast.LENGTH_LONG).show();
+
                                     }
-
-                                }
                             }
-
                             @Override
                             public void onFailure(Call<Ruta> call, Throwable t) {
                                 Log.i("aquí","falló");
@@ -92,5 +90,9 @@ public class RegistrarRuta extends Fragment {
         });
 
         return vista;
+    }
+
+    private EditText getViewById(View v, int p) {
+        return (EditText) v.findViewById(p);
     }
 }
