@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/textAvozFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="texto a voz" />
+        <item
             android:id="@+id/vozAtextoFragment"
             android:icon="@drawable/ic_menu_camera"
             android:title="voz a texto" />

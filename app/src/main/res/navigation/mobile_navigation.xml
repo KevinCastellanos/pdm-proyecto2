@@ -42,4 +42,9 @@
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.vozAtextoFragment"
         android:label="fragment_voz_atexto"
         tools:layout="@layout/fragment_voz_atexto" />
+    <fragment
+        android:id="@+id/textAvozFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.textAvozFragment"
+        android:label="fragment_text_avoz"
+        tools:layout="@layout/fragment_text_avoz" />
 </navigation>
