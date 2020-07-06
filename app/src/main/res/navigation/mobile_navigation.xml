@@ -32,4 +32,8 @@
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.MapsFragment"
         android:label="@string/menu_map"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/camaraFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.camaraX.CamaraFragment"
+        android:label="CamaraFragment" />
 </navigation>
