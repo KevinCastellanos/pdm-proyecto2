@@ -33,6 +33,7 @@
         android:label="@string/menu_map"
         tools:layout="@layout/fragment_maps" />
     <fragment
+<<<<<<< HEAD
         android:id="@+id/fragment_AgregarRuta"
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.RegistrarRuta"
         android:label="fragment__agregar_ruta"
@@ -54,4 +55,9 @@
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.Sonido"
         android:label="Sonido" />
 <!-->>>>>>> Sonido-->
+<!--=======-->
+        android:id="@+id/camaraFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.camaraX.CamaraFragment"
+        android:label="CamaraFragment" />
+<!-->>>>>>> r_camara-->
 </navigation>
