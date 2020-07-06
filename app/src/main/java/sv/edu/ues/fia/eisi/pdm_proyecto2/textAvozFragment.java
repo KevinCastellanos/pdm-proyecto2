@@ -117,6 +117,7 @@ public class textAvozFragment extends Fragment {
                                 "/Download/tts"+numarch+".wav";
                 myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,Texto_tts);
                 tts.synthesizeToFile(Texto_tts, myHashRender, destFileName);
+                Toast.makeText(getActivity(), "guardado en el cel", Toast.LENGTH_SHORT).show();
             }
         }
     };
