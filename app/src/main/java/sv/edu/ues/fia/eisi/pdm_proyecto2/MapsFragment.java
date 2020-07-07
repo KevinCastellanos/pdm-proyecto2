@@ -1,27 +1,23 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,9 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,11 +37,16 @@ import static sv.edu.ues.fia.eisi.pdm_proyecto2.camaraX.CamaraFragment.contador;
 
 public class MapsFragment extends Fragment {
 
+    public Marker markerBus;
+    private String textoRef = "hola";
+
     private Socket mSocket;
     {
         try {
-            mSocket=IO.socket("");
-        }catch (URISyntaxException e){}
+            mSocket=IO.socket("http://3.133.138.215:5000");
+        }catch (URISyntaxException e){
+            Toast.makeText(getContext(), "no se pudo conectar al socket io", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -65,6 +63,27 @@ public class MapsFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
+
+
+
+            // marcador de bus
+            markerBus = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(13.750055, -89.497186))
+                    .title("San Francisco")
+                    .snippet("Population: 776733"));
+
+            Log.i( "datos","data.toString()");
+            mSocket.on("mensaje-nuevo", getCoordenadas);
+            /*mSocket.on("mensaje-nuevo", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject obj = (JSONObject)args[0];
+                    Toast.makeText(getContext(), "LatLng", Toast.LENGTH_SHORT).show();
+                }
+            });*/
+            mSocket.connect();
+            Log.i( "datos","data.toString()");
+            System.out.println("datos: ");
 
             LatLng sydney = new LatLng(Coordenada.latitud,Coordenada.longitud);
             float zoom=16;
@@ -96,6 +115,8 @@ public class MapsFragment extends Fragment {
                     return myImage;
                 }
             });
+
+            // markerBus.setPosition();
         }
     };
 
@@ -104,17 +125,16 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        View vista = inflater.inflate(R.layout.fragment_maps, container, false);
+        //conexion con el servidor
+
+
+        return vista;
     }
 
     @Override
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //conexion con el servidor
-        mSocket.on("Coordenadas",getCoordenadas);
-        mSocket.connect();
-
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -122,34 +142,52 @@ public class MapsFragment extends Fragment {
         }
     }
 
-    private Emitter.Listener getCoordenadas=new Emitter.Listener() {
+    private Emitter.Listener getCoordenadas = new Emitter.Listener() {
+
         @Override
         public void call(Object... args) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data=(JSONObject) args[0];
+                    JSONObject data = (JSONObject) args[0];
+
+                    // Log.i( "socket", args[0]);
                     Double latitud;
                     Double longitud;
 
+                    // Toast.makeText(getContext(), "data: "+data, Toast.LENGTH_SHORT).show();
                     try {
-                        latitud=data.getDouble("latitud");
-                        longitud=data.getDouble("longitud");
+                        latitud = data.getDouble("lat");
+                        longitud = data.getDouble("lng");
+
+                        System.out.println(args[0].toString());
+
+                        // markerBus.setPosition(new LatLng(13.750055, -89.497186));
+                        // textoRef.setText("hola mundo");
+                        addMessage(latitud, longitud);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        return;
                     }
                 }
             });
         }
     };
 
+
     @Override
     public void onDestroy(){
         super.onDestroy();
 
-        mSocket.disconnect();
-        mSocket.off("Coordenadas",getCoordenadas);
+        // mSocket.disconnect();
+        // mSocket.off("Coordenadas",getCoordenadas);
+    }
+
+    private void addMessage(Double lat, Double lng) {
+
+        markerBus.setPosition(new LatLng(lat, lng));
+        // textoRef = username;
+
+        // Toast.makeText(getContext(), markerBus.getId(), Toast.LENGTH_SHORT).show();
     }
     
 }
