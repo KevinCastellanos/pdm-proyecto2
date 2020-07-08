@@ -1,10 +1,8 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
@@ -14,8 +12,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +40,7 @@ public class textAvozFragment extends Fragment {
     Button BtnPlay;
     Button BtnSave;
     private int numarch=0;
+    Retrofit retrofit;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,6 +117,89 @@ public class textAvozFragment extends Fragment {
             // TODO Auto-generated method stub
             if (v.getId()==R.id.btnText2SpeechPlay){
                 tts.speak(Texto.getText().toString(), TextToSpeech.QUEUE_ADD, null);
+
+
+                // evaluamos si la ruta esta en la lista registrada
+                // libreria de retrofit
+                retrofit = new Retrofit.Builder()
+                        .baseUrl(UrlBase.UrlBase)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                ApiServices apiServices = retrofit.create(ApiServices.class);
+
+                Call<List<Ruta>> call = apiServices.obtenerRutas();
+
+                call.enqueue(new Callback<List<Ruta>>() {
+                    @Override
+                    public void onResponse(Call<List<Ruta>> call, Response<List<Ruta>> response) {
+
+
+                        //Lista para recuperar los elementos de la API
+                        List<Ruta> listaRuta = response.body();
+
+                        //Definición de lista que se mostrarán en el adapter
+                        //  ArrayList<String> rutaprueba = new ArrayList<>();
+                        int bandera = 0;
+                        for (int i=0; i< response.body().size();i++){
+
+                            //     Log.e("Test",String.valueOf(listaRuta.get(i).getNOMBRE())); //Prueba para traer los nombres
+                            // rutaprueba.add(listaRuta.get(i).getNOMBRE());
+
+                            String u = listaRuta.get(i).getNOMBRE().toString();
+                            String p = Texto.getText().toString();
+                            if(u.equals( p )) {
+                                bandera = 1;
+                            } else {
+
+                            }
+                        }
+
+                        if(bandera == 1) {
+                            tts.speak("ruta encontrada", TextToSpeech.QUEUE_ADD, null);
+
+                            // navegar al fragmen mapa
+                            Navigation.findNavController(v).navigate(R.id.mapsFragment);
+
+                            /**
+                             *
+                             * guardar datos temporales
+                             *
+                             */
+                            // almacenar valores remporales
+                            SharedPreferences pref = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                            SharedPreferences.Editor editor = pref.edit();
+
+                            // insertar un valor
+                            editor.putString("nomRuta", Texto.getText().toString()); // Storing string
+
+                            editor.commit(); // commit changes
+                            /**
+                             *
+                             * fin de guardar datos temporales
+                             *
+                             */
+                        } else {
+                            tts.speak("No se encontro la ruta en la base de datos", TextToSpeech.QUEUE_ADD, null);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Ruta>> call, Throwable t) {
+                        // Toast.makeText(vista.getContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
+
+
+
+
+                Toast.makeText(getContext(), "" + Texto.getText().toString(), Toast.LENGTH_SHORT).show();
             }
             if (v.getId()==R.id.btnText2SpeechSave){
                 tts.speak(Texto.getText().toString(), TextToSpeech.QUEUE_ADD, null);

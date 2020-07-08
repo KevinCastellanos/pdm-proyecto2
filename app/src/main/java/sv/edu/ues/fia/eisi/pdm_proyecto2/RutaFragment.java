@@ -1,10 +1,7 @@
 package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,20 @@ public class RutaFragment extends Fragment {
         // Inflate the layout for this fragment
         this.vista = inflater.inflate(R.layout.fragment_ruta, container, false);
 
+
+
+
+
+
+
+        return this.vista;
+    }
+
+    // este metodo se ejecuta exactamente despues de onCreateView
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         // crear el adaptador
         this.lista = (ListView) this.vista.findViewById(R.id.id_lista_ruta);
 
@@ -68,14 +84,14 @@ public class RutaFragment extends Fragment {
                 Log.e("Test",String.valueOf(response.body().size()));
                 */
 
-               //Lista para recuperar los elementos de la API
-               List<Ruta> listaRuta = response.body();
+                //Lista para recuperar los elementos de la API
+                List<Ruta> listaRuta = response.body();
 
-               //Definición de lista que se mostrarán en el adapter
+                //Definición de lista que se mostrarán en el adapter
                 ArrayList<String> rutaprueba = new ArrayList<>();
 
-               for (int i=0; i<response.body().size();i++){
-               //     Log.e("Test",String.valueOf(listaRuta.get(i).getNOMBRE())); //Prueba para traer los nombres
+                for (int i=0; i<response.body().size();i++){
+                    //     Log.e("Test",String.valueOf(listaRuta.get(i).getNOMBRE())); //Prueba para traer los nombres
                     rutaprueba.add(listaRuta.get(i).getNOMBRE());
                 }
 
@@ -93,11 +109,31 @@ public class RutaFragment extends Fragment {
 
         this.lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(parent.getContext(), "Seleccionó la ruta: " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+
+                // navegar al fragmen mapa
+                Navigation.findNavController(v).navigate(R.id.mapsFragment);
+
+                /**
+                 *
+                 * guardar datos temporales
+                 *
+                 */
+                // almacenar valores remporales
+                SharedPreferences pref = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+
+                // insertar un valor
+                editor.putString("nomRuta", parent.getItemAtPosition(position).toString()); // Storing string
+
+                editor.commit(); // commit changes
+                /**
+                 *
+                 * fin de guardar datos temporales
+                 *
+                 */
             }
         });
-
-        return this.vista;
     }
 }

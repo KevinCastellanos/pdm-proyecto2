@@ -2,26 +2,34 @@ package sv.edu.ues.fia.eisi.pdm_proyecto2;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
 import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.TextoReconocido;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +52,8 @@ public class vozAtextoFragment extends Fragment {
     ListView lv;
     static final int check=1111;
     Button Voice;
+    Retrofit retrofit;
+    View vista;
 
 
     public vozAtextoFragment() {
@@ -81,7 +91,7 @@ public class vozAtextoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View vista=inflater.inflate(R.layout.fragment_voz_atexto, container, false);
+        vista = inflater.inflate(R.layout.fragment_voz_atexto, container, false);
         lv=vista.findViewById(R.id.lvVoiceReturn);
         Voice=vista.findViewById(R.id.bvoice);
         Voice.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +114,8 @@ public class vozAtextoFragment extends Fragment {
                     public void run() {
                         lv.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,
                                 TextoReconocido.listavoz));
+
+
                     }
                 };
                 handler.postDelayed(r
@@ -131,8 +143,90 @@ public class vozAtextoFragment extends Fragment {
             TextoReconocido.listavoz=results;
             lv.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,
                     results));
-            Toast.makeText(getActivity(),"texto guardado",Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(),"texto guardado",Toast.LENGTH_SHORT).show();
            // Log.i("voz",TextoReconocido.listavoz.get(1));
+            Toast.makeText(getContext(), ""+ TextoReconocido.listavoz.get(0), Toast.LENGTH_SHORT).show();
+
+
+
+
+            // evaluamos si la ruta esta en la lista registrada
+            // libreria de retrofit
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(UrlBase.UrlBase)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ApiServices apiServices = retrofit.create(ApiServices.class);
+
+            Call<List<Ruta>> call = apiServices.obtenerRutas();
+
+            call.enqueue(new Callback<List<Ruta>>() {
+                @Override
+                public void onResponse(Call<List<Ruta>> call, Response<List<Ruta>> response) {
+
+
+                    //Lista para recuperar los elementos de la API
+                    List<Ruta> listaRuta = response.body();
+
+                    //Definición de lista que se mostrarán en el adapter
+                    //  ArrayList<String> rutaprueba = new ArrayList<>();
+                    int bandera = 0;
+                    for (int i=0; i< response.body().size();i++){
+
+                        //     Log.e("Test",String.valueOf(listaRuta.get(i).getNOMBRE())); //Prueba para traer los nombres
+                        // rutaprueba.add(listaRuta.get(i).getNOMBRE());s=s.toUpperCase();
+
+                        String u = listaRuta.get(i).getNOMBRE().toString();
+                        String p = TextoReconocido.listavoz.get(0).toUpperCase();
+                        if(u.equals( p )) {
+                            bandera = 1;
+                        } else {
+
+                        }
+                    }
+
+                    if(bandera == 1) {
+                        // tts.speak("ruta encontrada", TextToSpeech.QUEUE_ADD, null);
+                        Toast.makeText(getContext(), "Ruta encontrada", Toast.LENGTH_SHORT).show();
+                        // navegar al fragmen mapa
+                        Navigation.findNavController(vista).navigate(R.id.mapsFragment);
+
+                        /**
+                         *
+                         * guardar datos temporales
+                         *
+                         */
+                        // almacenar valores remporales
+                        SharedPreferences pref = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                        SharedPreferences.Editor editor = pref.edit();
+
+                        // insertar un valor
+                        editor.putString("nomRuta", TextoReconocido.listavoz.get(0)); // Storing string
+
+                        editor.commit(); // commit changes
+                        /**
+                         *
+                         * fin de guardar datos temporales
+                         *
+                         */
+                    } else {
+                        // tts.speak("No se encontro la ruta en la base de datos", TextToSpeech.QUEUE_ADD, null);
+                        Toast.makeText(getContext(), "No se encontro la ruta en la base de datos", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<List<Ruta>> call, Throwable t) {
+                    // Toast.makeText(vista.getContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
