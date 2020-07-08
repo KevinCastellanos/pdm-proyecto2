@@ -4,61 +4,136 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GraficaFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.RadarData;
+import com.github.mikephil.charting.data.RadarDataSet;
+import com.github.mikephil.charting.data.RadarEntry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Clases.Ruta;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.ApiServices;
+import sv.edu.ues.fia.eisi.pdm_proyecto2.Interfaces.UrlBase;
+
 public class GraficaFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private LineChart lineChart;
+    private BarChart barChart;
+    private RadarChart radarChart;
+    private LineDataSet lineDataSet;
+    private BarDataSet barDataSet;
+    private RadarDataSet radarDataSet;
+    private List<Ruta> rutaGraficos;
 
     public GraficaFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GraficaFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GraficaFragment newInstance(String param1, String param2) {
-        GraficaFragment fragment = new GraficaFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_grafica, container, false);
+        View vista=inflater.inflate(R.layout.fragment_grafica, container, false);
+
+        Retrofit retrofit=new Retrofit.Builder()
+                .baseUrl(UrlBase.UrlBase)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiServices apiServices=retrofit.create(ApiServices.class);
+
+        Call<List<Ruta>> call=apiServices.obtenerRutas();
+
+        call.enqueue(new Callback<List<Ruta>>() {
+            @Override
+            public void onResponse(Call<List<Ruta>> call, Response<List<Ruta>> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(getContext(),"Error response",Toast.LENGTH_LONG).show();
+                    Log.d("ERROR", "onResponse: "+response.code());
+                    return;
+                }
+
+                rutaGraficos =response.body();
+                graficarLinea(vista);
+                graficarBarra(vista);
+                graficarRadio(vista);
+            }
+
+            @Override
+            public void onFailure(Call<List<Ruta>> call, Throwable t) {
+                Toast.makeText(getContext(),"Error failure",Toast.LENGTH_LONG).show();
+                Log.d("ERROR", "onFailure: "+t.getMessage());
+            }
+        });
+
+
+        return vista;
+    }
+
+    public void graficarLinea(View vista){
+        lineChart = vista.findViewById(R.id.lineChart);
+
+        ArrayList<Entry> lineEntries = new ArrayList<Entry>();
+
+        for (Ruta rutaGraficos : this.rutaGraficos) {
+            lineEntries.add(new Entry((Integer) rutaGraficos.getIDRUTAS(), (Integer) rutaGraficos.getCANTIDAD()));
+        }
+
+        lineDataSet = new LineDataSet(lineEntries, "AppBus");
+
+        LineData lineData = new LineData();
+        lineData.addDataSet(lineDataSet);
+        lineChart.setData(lineData);
+    }
+
+    public void graficarBarra(View vista){
+        barChart=vista.findViewById(R.id.barChart);
+
+        ArrayList<BarEntry> barEntries=new ArrayList<BarEntry>();
+
+        for (Ruta rutaGraficos : this.rutaGraficos) {
+            barEntries.add(new BarEntry((Integer) rutaGraficos.getIDRUTAS(), (Integer) rutaGraficos.getCANTIDAD()));
+        }
+
+        barDataSet=new BarDataSet(barEntries,"AppBus");
+
+        BarData barData=new BarData();
+        barData.addDataSet(barDataSet);
+        barChart.setData(barData);
+    }
+
+    public void graficarRadio(View vista){
+        radarChart=vista.findViewById(R.id.radarChart);
+
+        ArrayList<RadarEntry> radarEntries=new ArrayList<RadarEntry>();
+
+        for (Ruta rutaGraficos : this.rutaGraficos) {
+            radarEntries.add(new RadarEntry((Integer) rutaGraficos.getIDRUTAS(), (Integer) rutaGraficos.getCANTIDAD()));
+        }
+
+        radarDataSet=new RadarDataSet(radarEntries,"AppBus");
+
+        RadarData radarData=new RadarData();
+        radarData.addDataSet(radarDataSet);
+        radarChart.setData(radarData);
     }
 }

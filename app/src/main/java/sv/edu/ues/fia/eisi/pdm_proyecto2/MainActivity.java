@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
                         R.id.fragment_AgregarRuta,
                         R.id.vozAtextoFragment,
                         R.id.activity_sonido,
-                        R.id.camaraFragment)
+                        R.id.camaraFragment,
+                        R.id.graficaFragment)
 // =======
                 // R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.rutaFragment,R.id.mapsFragment, R.id.fragment_AgregarRuta, R.id.vozAtextoFragment, R.id.activity_sonido)
 // >>>>>>> Sonido

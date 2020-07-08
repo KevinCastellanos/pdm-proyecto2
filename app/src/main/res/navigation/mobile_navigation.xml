@@ -61,4 +61,11 @@
         android:id="@+id/camaraFragment"
         android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.camaraX.CamaraFragment"
         android:label="CamaraFragment"/>
+
+<!-- R_graficas-->
+    <fragment
+        android:id="@+id/graficaFragment"
+        android:name="sv.edu.ues.fia.eisi.pdm_proyecto2.GraficaFragment"
+        android:label="fragment_grafica"
+        tools:layout="@layout/fragment_grafica" />
 </navigation>

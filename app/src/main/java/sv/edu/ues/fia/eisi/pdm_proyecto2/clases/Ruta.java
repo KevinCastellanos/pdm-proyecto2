@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class Ruta {
+    @SerializedName("IDRUTAS")
+    @Expose
+    private Integer IDRUTAS;
+
     @SerializedName("NOMBRE")
     @Expose
     private String NOMBRE;
@@ -13,15 +17,30 @@ public class Ruta {
     @Expose
     private String DESCRIPCION;
 
-    public Ruta() {
-    }
+    @SerializedName("CANTIDAD")
+    @Expose
+    private Integer CANTIDAD;
 
-    public Ruta(String NOMBRE, String DESCRIPCION) {
+    public Ruta(){}
+
+    public Ruta(Integer IDRUTAS, String NOMBRE, String DESCRIPCION, Integer CANTIDAD) {
+        this.IDRUTAS = IDRUTAS;
         this.NOMBRE = NOMBRE;
         this.DESCRIPCION = DESCRIPCION;
+        this.CANTIDAD = CANTIDAD;
     }
 
-    public String getNOMBRE() { return NOMBRE; }
+    public Integer getIDRUTAS() {
+        return IDRUTAS;
+    }
+
+    public void setIDRUTAS(Integer IDRUTAS) {
+        this.IDRUTAS = IDRUTAS;
+    }
+
+    public String getNOMBRE() {
+        return NOMBRE;
+    }
 
     public void setNOMBRE(String NOMBRE) {
         this.NOMBRE = NOMBRE;
@@ -33,5 +52,13 @@ public class Ruta {
 
     public void setDESCRIPCION(String DESCRIPCION) {
         this.DESCRIPCION = DESCRIPCION;
+    }
+
+    public Integer getCANTIDAD() {
+        return CANTIDAD;
+    }
+
+    public void setCANTIDAD(Integer CANTIDAD) {
+        this.CANTIDAD = CANTIDAD;
     }
 }
