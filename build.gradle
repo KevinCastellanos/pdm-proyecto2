@@ -20,7 +20,9 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
+        //implentacion de graficas
+        maven { url 'https://jitpack.io' }
     }
 }
 

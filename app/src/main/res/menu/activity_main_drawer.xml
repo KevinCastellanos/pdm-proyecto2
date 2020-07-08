@@ -18,9 +18,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Camara" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/graficaFragment"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:title="Graficas" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -41,6 +41,5 @@
             android:id="@+id/activity_sonido"
             android:icon="@drawable/ic_launcher_background"
             android:title="Sonido" />
-
     </group>
 </menu>
